@@ -49,7 +49,7 @@
       }
     ],
     "dest": "_site",
-    "globalMetadataFiles": {
+    "globalMetadata": {
       "_disableContribution" : "true",
       "_appFooter": "Welcome to the world of tomorrow again and again ??"
     },
