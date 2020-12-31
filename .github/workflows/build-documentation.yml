@@ -1,0 +1,68 @@
+name: Build Documentation
+on:
+  repository_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    # Checkout all repos
+    - name: Checkout Current Articles Repo
+      uses: actions/checkout@v1
+      with:
+        path: docs
+        fetch-depth: 1
+    - name: Checkout Source Code Repo
+      uses: actions/checkout@v1
+      with:
+        repository: AlzPatz/yak2d
+        ref: master
+        fetch-depth: 1
+        path: docs/sourcerepo
+    - name: Extract API Source and put into correct folder, then delete sourcerepo
+      run: |
+        mkdir src
+        mv -v ./sourcerepo/src/Yak2D.Api/* ./src/
+        mv -v ./sourcerepo/src/Yak2D/* ./src/
+        rm -R ./sourcerepo
+    - name: Checkout Live Docs Repo
+      uses: actions/checkout@v1
+      with:
+        repository: AlzPatz/yak2d-docs
+        ref: master
+        fetch-depth: 1
+        path: docs/live
+    - name: Clear live docs repo
+      run: rm -rf live/*
+
+    # Set up Software
+    - name: Get mono
+      run: |
+        sudo apt install gnupg ca-certificates
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+        echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+        sudo apt update
+        sudo apt-get install mono-complete --yes
+    - name: Get docfx
+      run: |
+        curl -L https://github.com/dotnet/docfx/releases/latest/download/docfx.zip -o docfx.zip
+        unzip -d .docfx docfx.zip
+      
+    # Build
+    - name: Build docs
+      run: |
+        mono .docfx/docfx.exe
+        mv -v ./_site/* ./live/
+    - name: Commit and push
+      run: |
+        cd live
+        git config --global user.email "nomail@alzpatz.org"
+        git config --global user.name "Automated Documentation Builder"
+        git add .
+        git commit -m "Automated Documentation Site Update" --author $GITHUB_ACTOR
+        header=$(echo -n "ad-m:${{ secrets.DOCUMENTATION_MANAGEMENT_TOKEN }}" | base64)
+        git -c http.extraheader="AUTHORIZATION: basic $header" push origin HEAD:master
