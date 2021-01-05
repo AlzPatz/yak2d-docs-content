@@ -16,7 +16,7 @@ Audio functionality is ***not*** provided by the framework.
 ## Structure
 For those that care about such definitions, **yak2D** is described (and structured) as a *framework* rather than a *library*. This structure is suitable given the control that **yak2D** must have over the [application lifecycle](xref:uid_lifecycle) - in particular, the timing and sequencing of **update** and **render** steps. 
 
-The framework accepts an instance of the user's implementation of the [IApplication](xref:Yak2D.IApplication) interface and calls it's methods during the [application lifecycle](xref:uid_lifecycle).
+The framework accepts an instance of the user's implementation of the [IApplication](xref:Yak2D.IApplication) interface and calls its methods during the [application lifecycle](xref:uid_lifecycle).
 
 ## Rendering
 
@@ -39,9 +39,9 @@ A user must define three main parts of a **yak2D** application's core loop:
 
 ## Resources
 
-**yak2D** manages the creation and destruction of all objects related to framework usage ([Textures](xref:Yak2D.ITexture), [Cameras](xref:Yak2D.ICamera2D), [Render Stages](xref:Yak2D.IRenderStage)... being examples). These objects are called [Resources](xref:uid_glossary#Resources) and are not passed to the user directly. Rather, a user application holds lightweight objects that reference the underlying resource. These lightweight objects are simple wrappers around `int64` keys and in some instances a user may wish to hold only these `int64` keys. Many of **yak2D**'s functions accept either object (derived from [IKeyed](xref:Yak2D.IKeyed]) or the raw int64 keys. The [IKeyed](xref:Yak2D.IKeyed] object hierarchy was used so C#'s type system to help a user avoid passing the wrong objects to functions, as well as get instant feedback on object type from intellisense.
+**yak2D** manages the creation and destruction of all objects related to framework usage ([Textures](xref:Yak2D.ITexture), [Cameras](xref:Yak2D.ICamera2D), [Render Stages](xref:Yak2D.IRenderStage)... being examples). These objects are called [Resources](xref:uid_glossary#Resources) and are not passed to the user directly. Rather, a user application holds lightweight objects that reference the underlying resource. These lightweight objects are simple wrappers around `int64` keys and in some instances a user may wish to hold only these `int64` keys. Many of **yak2D**'s functions accept either object (derived from [IKeyed](xref:Yak2D.IKeyed)) or the raw int64 keys. The [IKeyed](xref:Yak2D.IKeyed) object hierarchy is used so that C#'s type system ensures a user avoids passing the wrong objects to functions, as well as get instant feedback on object type from intellisense.
 
-[IApplication](xref:Yak2D.IApplication) exsposes the method [CreateResources](xref:Yak2D.IApplication.CreateResources) which is where all [Resource](xref:uid_glossary#Resources) creation should be performed. This method is called once at application start up, and then whenever [Resources](xref:uid_glossary#Resources) should be re-created (such as when a graphics device is lost during a Graphics API change).
+[IApplication](xref:Yak2D.IApplication) exposes the method [CreateResources](xref:Yak2D.IApplication.CreateResources) which is where all [Resource](xref:uid_glossary#Resources) creation should be performed. This method is called once at application start up, and then whenever [Resources](xref:uid_glossary#Resources) should be re-created (such as when a graphics device is lost during a Graphics API change).
 
 ## Basic Usage
 
