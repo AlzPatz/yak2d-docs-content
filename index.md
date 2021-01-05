@@ -15,7 +15,3 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 [![NuGet](https://img.shields.io/nuget/v/yak2d.svg)](https://www.nuget.org/packages/Yak2D/)
 
 Please see the [Demo Samples](https://github.com/AlzPatz/yak2d-samples) for usage examples or the [Articles](xref:uid_intro) section for additional guidance on **yak2D** concepts and usage.
-
-Finally, please enjoy this picture of a yak:
-
-![](images/yak.png)

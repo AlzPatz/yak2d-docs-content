@@ -2,12 +2,16 @@
 uid: uid_intro
 ---
 
-# Articles
+# **yak2D** Usage Guide
 
-Below are links to articles describing the structure and usage of **yak2D**
+Below are links which hopefully help explain the usage of the **yak2D** framework
 
 ## Links
 
-[Glossary](xref:uid_glossary)
+[Overview and Getting Started](xref:uid_overview)
 
-[Application LifeCycle](xref:uid_lifecycle)
+[Glossary of Terms](xref:uid_glossary)
+
+[Framework Features](xref:uid_features)
+
+[Application Lifecycle](xref:uid_lifecycle)
