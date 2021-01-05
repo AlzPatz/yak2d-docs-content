@@ -33,7 +33,9 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "images/**",
+          "logo.svg",
+          "favicon.ico"
         ]
       }
     ],
@@ -51,7 +53,7 @@
     "dest": "_site",
     "globalMetadata": {
       "_disableContribution" : "true",
-      "_appFooter": "Welcome to the world of tomorrow again and again ??"
+      "_appFooter": "yak2D - Alex Paterson"
     },
     "fileMetadataFiles": [],
     "template": [
