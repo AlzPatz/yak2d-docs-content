@@ -34,7 +34,6 @@
       {
         "files": [
           "images/**",
-          "logo.svg",
           "favicon.ico"
         ]
       }
@@ -53,7 +52,8 @@
     "dest": "_site",
     "globalMetadata": {
       "_disableContribution" : "true",
-      "_appFooter": "yak2D - Alex Paterson"
+      "_appFooter": "yak2D - Alex Paterson",
+      "_appLogoPath": "images/logo.svg"
     },
     "fileMetadataFiles": [],
     "template": [
