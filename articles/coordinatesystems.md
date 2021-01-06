@@ -27,11 +27,11 @@ A user can choose a [virtual resolution](xref:uid_glossary#VirtualResolution) an
 
 **yak2D** uses 3 coordinate systems (or ***spaces***) for 2D rendering:
 
-1. [**Screen**](xref:uid_coordinatesystems#screenspace) space
-2. [**World**](xref:uid_coordinatesystems#worldspace) space
-3. [**Window**](xref:uid_coordinatesystems#windowspace) space
+1. [**Screen**](xref:uid_coordinatesystems#screen-space) space
+2. [**World**](xref:uid_coordinatesystems#world-space) space
+3. [**Window**](xref:uid_coordinatesystems#window-space) space
 
-### [**Screen Space**](#screenspace)
+### **Screen Space**
 The coordinate system used when drawing with [CoordinateSpace.Screen](xref:Yak2D.CoordinateSpace). Positions are defined in relation to a fixed visible area defined by the camera's [virtual resolution](xref:uid_glossary#VirtualResolution).
 
 The origin (0,0) is located in the centre. Positive X-axis runs from left to right, with positive Y-axis running 'upwards' towards the top of the visible area.
@@ -57,6 +57,10 @@ The coordinate system used when drawing with [CoordinateSpace.World](xref:Yak2D.
 World space's axis are similar to screen space, in that when unrotated, positive X-axis runs from left to right, with positive Y-axis running 'upwards' towards the top of the visible area.
 
 Therefore, if the camera's world focus point is (0,0), it's zoom is 1.0 and there is no camera rotation, then a position in world space will match a position in screen space.
+
+### **Window Space**
+
+Next typing
 
 ## Viewports
 
