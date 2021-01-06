@@ -53,7 +53,7 @@ where:
 ### **World Space**
 The coordinate system used when drawing with [CoordinateSpace.World](xref:Yak2D.CoordinateSpace). Positions are defined in relation to an origin. The visible area is defined by the camera's world focus point (position) in relation to the origin, the camera's zoom scalar, rotation and [virtual resolution](xref:uid_glossary#VirtualResolution).
 
-World space's axis are similar to screen space, in that when unrotated, positive X-axis runs from left to right, with positive Y-axis running 'upwards' towards the top of the visible area.
+**World space axis are similar to screen space**, in that when unrotated, positive X-axis runs from left to right, with positive Y-axis running 'upwards' towards the top of the visible area.
 
 Therefore, if the camera's world focus point is (0,0), it's zoom is 1.0 and there is no camera rotation, then a position in world space will match a position in screen space.
 
@@ -83,11 +83,11 @@ where:
 ## Viewports
 [Viewports](xref:uid_viewports) are used to define rectangular [render areas](xref:uidglossary#RenderArea) of a [RenderTarget](xref:uid_rendertargets). 
 
-Viewport position and size are defined in pixel units and use [window space](xref:uid_coordinatesystems#window-space) axes.
+Viewport position and size are defined in pixel units and use [window space](xref:uid_coordinatesystems#window-space) coordinates.
 
 ## Texture Coordinates
 
-**yak2D** texture coordinates are origin top-left and do not change across any graphics API backends. This is the same as used in Direct3D, Vulkan and Metal APIs, and is the same origin and axes directions as [window space](xref:uid_coordinatesystems#window-space).
+**yak2D** texture coordinates are origin top-left and do not change across any graphics API backends. This is the same as used in Direct3D, Vulkan and Metal APIs, and is the coordinate system as [window space](xref:uid_coordinatesystems#window-space).
 
 **Note:** When writing shaders for a [CustomVeldrid](xref:Yak2D.ICustomVeldrid) [RenderStage](xref:uid_renderstages), the user is responsible for accounting for the backend differences between graphics APIs.
 
@@ -102,7 +102,7 @@ The [MeshRender](xref:Yak2D.IMeshRender) [RenderStage](xref:uid_renderstages) us
 **Note:** When writing shaders for a [CustomVeldrid](xref:Yak2D.ICustomVeldrid) [RenderStage](xref:uid_renderstages), the user is responsible for accounting for the backend differences between graphics APIs.
 
 ## Mouse Input
-**yak2D** provides [mouse position](xref:Yak2D.Input.MousePosition) as a position on the application window, in [window space](xref:uid_coordinatesystems#window-space).
+**yak2D** provides [mouse position](xref:Yak2D.IInput.MousePosition) as a position on the application window, in [window space](xref:uid_coordinatesystems#window-space).
 
 ## Coordinate System Conversions
 

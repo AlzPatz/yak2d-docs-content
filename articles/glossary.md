@@ -4,7 +4,7 @@ uid: uid_glossary
 
 # **yak2D** Glossary
 
-Key Framework Terms
+Framework Terms
 
 ## Service
 
