@@ -2,7 +2,9 @@
 uid: uid_glossary
 ---
 
-# **Glossary** : Key Framework Terms
+# **yak2D** Glossary
+
+Key Framework Terms
 
 ## Service
 

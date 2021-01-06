@@ -1,7 +1,7 @@
 ---
 uid: uid_lifecycle
 ---
-# **Application Lifecycle**
+# **yak2D** Application Lifecycle
 
 
 Below is a diagram of program flow for an application using the **yak2D** framework.
