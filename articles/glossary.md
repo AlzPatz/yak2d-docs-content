@@ -4,7 +4,7 @@ uid: uid_glossary
 
 # **yak2D** Glossary
 
-Definitions used (mostly) consistently across **yak2D**'s source code and documentation.
+Definitions used (hopefully) consistently across **yak2D**'s source code and documentation.
 
 ## Application
 Refers to user code run with **yak2D**, consisting of the implemenation of the [IApplication](xref:Yak2D.IApplication) interface and supporting code.
@@ -18,7 +18,8 @@ An object created by the **yak2D** framework. Internally, **yak2D** holds an `in
 
 ## RenderStage
 
-## Render Area
+## RenderArea
+A term used in **yak2D** documentation that refers to either an entire [RenderTarget](xref:uid_rendertargets) or a rectangular area of one as defined by a [viewport](xref:uid_viewports). There are no objects named 'RenderArea' used directly in the **yak2D** API.
 
 ## Service
 
@@ -27,6 +28,8 @@ An object created by the **yak2D** framework. Internally, **yak2D** holds an `in
 
 
 ## Camera
+
+## Virtual Resolution
 
 
 

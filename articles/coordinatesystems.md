@@ -6,21 +6,21 @@ uid: uid_coordinatesystems
 
 ## RenderStage Output
 
-A RenderStage's output is render area size agnostic. This means that a [RenderStage](xref:uid_renderstages)'s output will fill the entire destination [render area](xref:uidglossary#RenderArea), which is either an entire [RenderTarget](xref:uid_rendertargets) or a rectangular area of one defined by a [viewport](xref:uid_viewports). 
+A RenderStage's output is render area size agnostic. This means that a [RenderStage](xref:uid_renderstages)'s output will fill the entire destination [render area](xref:uid_glossary#RenderArea), which is either an entire [RenderTarget](xref:uid_rendertargets) or a rectangular area of one defined by a [viewport](xref:uid_viewports). 
 
 The pixel size of the [render area](xref:uidglossary#RenderArea) does not matter. 
 
-However, if the aspect ratio of the destination [render area](xref:uidglossary#RenderArea) does not match that of the [RenderStage](xref:uid_renderstages)'s output, the output will be distorted (stretched or squashed) to fit.
+However, if the aspect ratio of the destination [render area](xref:uid_glossary#RenderArea) does not match that of the [RenderStage](xref:uid_renderstages)'s output, the output will be distorted (stretched or squashed) to fit.
 
 ## Drawing
 
-During [Drawing](xref:uid_glossary#Drawing), [DrawRequests](xref:Yak2D.DrawRequest) are submitted to, and rendered by, a [DrawStage](xref:Yak2D.IDrawStage). The final position of vertices upon the [render area](xref:uidglossary#RenderArea) is transformed by the assigned [Camera2D](xref:Yak2D.ICamera2D).
+During [Drawing](xref:uid_glossary#Drawing), [DrawRequests](xref:Yak2D.DrawRequest) are submitted to, and rendered by, a [DrawStage](xref:Yak2D.IDrawStage). The final position of vertices upon the [render area](xref:uid_glossary#RenderArea) is transformed by the assigned [Camera2D](xref:Yak2D.ICamera2D).
 
 Each [Camera2D](xref:Yak2D.ICamera2D) has a [virtual resolution](xref:uid_glossary#VirtualResolution) that defines the boundaries of [screen space](xref:uid_coordinatesystems#screenspace) as well as [world space](xref:uid_coordinatesystems#worldspace) once a camera's zoom, world focus point and rotation are also accounted for.
 
 ## What this means in practice
 
-A user can choose a [virtual resolution](xref:uid_glossary#VirtualResolution) and draw everything in relation to these effective screen dimensions, but it can be rendered at a final real resolution chosen simply by the an appropriately sized [render area](xref:uidglossary#RenderArea).  
+A user can choose a [virtual resolution](xref:uid_glossary#VirtualResolution) and draw everything in relation to these effective screen dimensions, but it can be rendered at a final real resolution chosen simply by the an appropriately sized [render area](xref:uid_glossary#RenderArea).  
 
 ## Coordinate Systems (***spaces***)
 
@@ -60,7 +60,7 @@ Therefore, if the camera's world focus point is (0,0), it's zoom is 1.0 and ther
 ### **Window Space**
 Window space is used when defining [viewports](xref:uid_viewports) and is the coordinate system used for [mouse position](xref:Yak2D.Input.MousePosition).
 
-The origin (0,0) of window space is positioned at the top-left corner of the window (or [Render Target](xref:uid_rendertargets)), with positive X-axis running from left to right, and positive Y-axis running 'downwards' towards the bottom of the window (or [Render Target](xref:uid_rendertargets)).
+The origin (0,0) of window space is positioned at the top-left corner of the window (or [RenderTarget](xref:uid_rendertargets)), with positive X-axis running from left to right, and positive Y-axis running 'downwards' towards the bottom of the window (or [RenderTarget](xref:uid_rendertargets)).
 
 Window space units are absolute pixels.
 
