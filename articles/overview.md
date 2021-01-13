@@ -37,6 +37,8 @@ A user must define three main parts of a **yak2D** application's core loop:
 3. **Render**
     - For building the render queue by ordering [RenderStages](xref:uid_renderstages) and defining the input and output [Surfaces](xref:uid_surfaces) for each step
 
+Loop timing is different for 1, the [UpdateStep](xref:uid_glossary#updatestep), versus 2 and 3, which are grouped together within the [RenderStep](xref:uid_glossary#renderstep)
+
 ## Resources
 
 **yak2D** manages the creation and destruction of all objects related to framework usage ([Textures](xref:Yak2D.ITexture), [Cameras](xref:Yak2D.ICamera2D), [RenderStages](xref:Yak2D.IRenderStage)... being examples). These objects are called [Resources](xref:uid_glossary#Resource) and are not passed to the user directly. Rather, a user application holds lightweight objects that reference the underlying resource. These lightweight objects are simple wrappers around `int64` keys and in some instances a user may wish to hold only these `int64` keys. Many of **yak2D**'s functions accept either object (derived from [IKeyed](xref:Yak2D.IKeyed)) or the raw int64 keys. The [IKeyed](xref:Yak2D.IKeyed) object hierarchy is used so that C#'s type system ensures a user avoids passing the wrong objects to functions, as well as get instant feedback on object type from intellisense.
