@@ -1,7 +1,7 @@
 ---
 uid: uid_overview
 ---
-# **yak2D** Overview and Getting Started
+# **yak2D** Overview and Basic Usage
 
 ## Overview
 
