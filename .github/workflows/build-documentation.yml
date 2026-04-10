@@ -68,9 +68,9 @@ jobs:
           set -euxo pipefail
           sudo apt-get update
           sudo apt-get install -y ca-certificates gnupg curl unzip
-          sudo mkdir -p /etc/apt/keyrings
-          curl -fsSL https://download.mono-project.com/repo/xamarin.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/mono-official.gpg
-          echo "deb [signed-by=/etc/apt/keyrings/mono-official.gpg] https://download.mono-project.com/repo/ubuntu stable-jammy main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list > /dev/null
+          sudo gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          sudo chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           sudo apt-get update
           sudo apt-get install -y mono-complete
 
@@ -102,9 +102,11 @@ jobs:
         run: |
           set -euxo pipefail
           git add -A
+
           if git diff --cached --quiet; then
             echo "No documentation changes to publish."
             exit 0
           fi
+
           git commit -m "Automated Documentation Site Update"
           git push origin HEAD:master
