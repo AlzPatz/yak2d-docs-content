@@ -24,20 +24,19 @@ jobs:
 
     steps:
       - name: Checkout Current Articles Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: docs
           fetch-depth: 1
 
       - name: Checkout Source Code Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: AlzPatz/yak2d
           ref: master
           fetch-depth: 1
           path: docs/sourcerepo
-          # Add token only if this repo is private
-          # token: ${{ secrets.DOCUMENTATION_MANAGEMENT_TOKEN }}
+          token: ${{ secrets.DOCUMENTATION_MANAGEMENT_TOKEN }}
 
       - name: Extract API Source and put into correct folder, then delete sourcerepo
         run: |
@@ -45,14 +44,13 @@ jobs:
 
           mkdir -p src
 
-          # Copy contents rather than move, so failures are easier to diagnose
           cp -a sourcerepo/src/Yak2D.Api/. src/
           cp -a sourcerepo/src/Yak2D/. src/
 
           rm -rf sourcerepo
 
       - name: Checkout Live Docs Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: AlzPatz/yak2d-docs
           ref: master
@@ -65,8 +63,6 @@ jobs:
         working-directory: docs/live
         run: |
           set -euo pipefail
-
-          # Remove everything except the git metadata
           find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
 
       - name: Set up .NET
@@ -84,22 +80,22 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="$PATH:$HOME/.dotnet/tools"
-
           docfx
 
       - name: Copy generated site into live repo
         run: |
           set -euo pipefail
-
           cp -a _site/. live/
 
       - name: Commit and push
         working-directory: docs/live
+        env:
+          GIT_AUTHOR_NAME: Automated Documentation Builder
+          GIT_AUTHOR_EMAIL: nomail@alzpatz.org
+          GIT_COMMITTER_NAME: Automated Documentation Builder
+          GIT_COMMITTER_EMAIL: nomail@alzpatz.org
         run: |
           set -euo pipefail
-
-          git config user.name "Automated Documentation Builder"
-          git config user.email "nomail@alzpatz.org"
 
           git add -A
 
