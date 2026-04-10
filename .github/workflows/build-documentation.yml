@@ -1,3 +1,4 @@
+```yaml
 name: Build Documentation
 
 on:
@@ -17,83 +18,112 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
-    defaults:
-      run:
-        shell: bash
-        working-directory: docs
-
     steps:
-      - name: Checkout Current Articles Repo
+      - name: Checkout documentation source repo
         uses: actions/checkout@v5
         with:
           path: docs
           fetch-depth: 1
 
-      - name: Checkout Source Code Repo
+      - name: Checkout source code repo
         uses: actions/checkout@v5
         with:
           repository: AlzPatz/yak2d
           ref: master
+          path: source-repo
           fetch-depth: 1
-          path: docs/sourcerepo
           token: ${{ secrets.DOCUMENTATION_MANAGEMENT_TOKEN }}
 
-      - name: Extract API Source and put into correct folder, then delete sourcerepo
-        run: |
-          set -euxo pipefail
-          mkdir -p src
-          cp -a sourcerepo/src/Yak2D.Api/. src/
-          cp -a sourcerepo/src/Yak2D/. src/
-          rm -rf sourcerepo
-
-      - name: Checkout Live Docs Repo
+      - name: Checkout published docs repo
         uses: actions/checkout@v5
         with:
           repository: AlzPatz/yak2d-docs
           ref: master
+          path: publish-repo
           fetch-depth: 1
-          path: docs/live
           token: ${{ secrets.DOCUMENTATION_MANAGEMENT_TOKEN }}
           persist-credentials: true
 
-      - name: Clear live docs repo
-        working-directory: docs/live
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Show .NET info
+        run: |
+          set -euxo pipefail
+          dotnet --info
+          dotnet --list-sdks
+
+      - name: Restore source projects
+        working-directory: source-repo
+        run: |
+          set -euxo pipefail
+          dotnet restore src/Yak2D/Yak2D.csproj
+          dotnet restore src/Yak2D.Api/Yak2D.Api.csproj
+
+      - name: Build source projects
+        working-directory: source-repo
+        run: |
+          set -euxo pipefail
+          dotnet build src/Yak2D/Yak2D.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
+          dotnet build src/Yak2D.Api/Yak2D.Api.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
+
+      - name: Install DocFX
+        run: |
+          set -euxo pipefail
+          dotnet tool update --global docfx
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+          "$HOME/.dotnet/tools/docfx" --version
+
+      - name: Generate API metadata from built assemblies
+        working-directory: docs
+        run: |
+          set -euxo pipefail
+
+          rm -rf api obj/.cache/apidoc
+          mkdir -p .tmp
+
+          cat > .tmp/api-metadata.json <<'EOF'
+          {
+            "metadata": [
+              {
+                "src": [
+                  {
+                    "files": [
+                      "../source-repo/src/Yak2D/bin/Release/**/*.dll",
+                      "../source-repo/src/Yak2D.Api/bin/Release/**/*.dll"
+                    ]
+                  }
+                ],
+                "dest": "api",
+                "disableDefaultFilter": false
+              }
+            ]
+          }
+          EOF
+
+          docfx metadata .tmp/api-metadata.json
+
+      - name: Build docs site
+        working-directory: docs
+        run: |
+          set -euxo pipefail
+          docfx build docfx.json
+
+      - name: Clear published docs repo
+        working-directory: publish-repo
         run: |
           set -euxo pipefail
           find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
 
-      - name: Install Mono
-        working-directory: .
+      - name: Copy generated site into published docs repo
         run: |
           set -euxo pipefail
-          sudo apt-get update
-          sudo apt-get install -y ca-certificates gnupg curl unzip
-          sudo gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-          sudo chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-          sudo apt-get update
-          sudo apt-get install -y mono-complete
+          cp -a docs/_site/. publish-repo/
 
-      - name: Download DocFX zip
-        working-directory: .
-        run: |
-          set -euxo pipefail
-          curl -fL https://github.com/dotnet/docfx/releases/latest/download/docfx.zip -o docfx.zip
-          rm -rf .docfx
-          unzip -o docfx.zip -d .docfx
-
-      - name: Build docs with legacy DocFX
-        run: |
-          set -euxo pipefail
-          mono ../.docfx/docfx.exe docfx.json
-
-      - name: Copy generated site into live repo
-        run: |
-          set -euxo pipefail
-          cp -a _site/. live/
-
-      - name: Commit and push
-        working-directory: docs/live
+      - name: Commit and push published site
+        working-directory: publish-repo
         env:
           GIT_AUTHOR_NAME: Automated Documentation Builder
           GIT_AUTHOR_EMAIL: nomail@alzpatz.org
@@ -101,6 +131,7 @@ jobs:
           GIT_COMMITTER_EMAIL: nomail@alzpatz.org
         run: |
           set -euxo pipefail
+
           git add -A
 
           if git diff --cached --quiet; then
@@ -110,3 +141,4 @@ jobs:
 
           git commit -m "Automated Documentation Site Update"
           git push origin HEAD:master
+```
