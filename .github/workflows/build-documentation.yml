@@ -1,4 +1,5 @@
 name: Build Documentation
+
 on:
   repository_dispatch:
   push:
@@ -23,13 +24,13 @@ jobs:
 
     steps:
       - name: Checkout Current Articles Repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           path: docs
           fetch-depth: 1
 
       - name: Checkout Source Code Repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           repository: AlzPatz/yak2d
           ref: master
@@ -39,14 +40,14 @@ jobs:
 
       - name: Extract API Source and put into correct folder, then delete sourcerepo
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           mkdir -p src
           cp -a sourcerepo/src/Yak2D.Api/. src/
           cp -a sourcerepo/src/Yak2D/. src/
           rm -rf sourcerepo
 
       - name: Checkout Live Docs Repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           repository: AlzPatz/yak2d-docs
           ref: master
@@ -58,29 +59,37 @@ jobs:
       - name: Clear live docs repo
         working-directory: docs/live
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Install DocFX
+      - name: Install Mono
         working-directory: .
         run: |
-          set -euo pipefail
-          dotnet tool update --global docfx
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates gnupg curl unzip
+          sudo mkdir -p /etc/apt/keyrings
+          curl -fsSL https://download.mono-project.com/repo/xamarin.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/mono-official.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/mono-official.gpg] https://download.mono-project.com/repo/ubuntu stable-jammy main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y mono-complete
 
-      - name: Build docs
+      - name: Download DocFX zip
+        working-directory: .
         run: |
-          set -euo pipefail
-          export PATH="$PATH:$HOME/.dotnet/tools"
-          docfx
+          set -euxo pipefail
+          curl -fL https://github.com/dotnet/docfx/releases/latest/download/docfx.zip -o docfx.zip
+          rm -rf .docfx
+          unzip -o docfx.zip -d .docfx
+
+      - name: Build docs with legacy DocFX
+        run: |
+          set -euxo pipefail
+          mono ../.docfx/docfx.exe docfx.json
 
       - name: Copy generated site into live repo
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           cp -a _site/. live/
 
       - name: Commit and push
@@ -91,7 +100,7 @@ jobs:
           GIT_COMMITTER_NAME: Automated Documentation Builder
           GIT_COMMITTER_EMAIL: nomail@alzpatz.org
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           git add -A
           if git diff --cached --quiet; then
             echo "No documentation changes to publish."
@@ -99,4 +108,3 @@ jobs:
           fi
           git commit -m "Automated Documentation Site Update"
           git push origin HEAD:master
-        
