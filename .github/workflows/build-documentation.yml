@@ -46,15 +46,17 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: 8.0.x
 
       - name: Show .NET info
+        shell: bash
         run: |
           set -euxo pipefail
           dotnet --info
           dotnet --list-sdks
 
       - name: Restore source projects
+        shell: bash
         working-directory: source-repo
         run: |
           set -euxo pipefail
@@ -62,6 +64,7 @@ jobs:
           dotnet restore src/Yak2D.Api/Yak2D.Api.csproj
 
       - name: Build source projects
+        shell: bash
         working-directory: source-repo
         run: |
           set -euxo pipefail
@@ -69,6 +72,7 @@ jobs:
           dotnet build src/Yak2D.Api/Yak2D.Api.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
 
       - name: Install DocFX
+        shell: bash
         run: |
           set -euxo pipefail
           dotnet tool update --global docfx
@@ -76,12 +80,15 @@ jobs:
           "$HOME/.dotnet/tools/docfx" --version
 
       - name: Generate API metadata from built assemblies
+        shell: bash
         working-directory: docs
         run: |
           set -euxo pipefail
 
-          rm -rf api obj/.cache/apidoc
+          mkdir -p api
           mkdir -p .tmp
+
+          find api -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \) ! -name 'toc.yml' -delete
 
           cat > .tmp/api-metadata.json <<'EOF'
           {
@@ -89,10 +96,12 @@ jobs:
               {
                 "src": [
                   {
-                    "files": [
-                      "../source-repo/src/Yak2D/bin/Release/**/*.dll",
-                      "../source-repo/src/Yak2D.Api/bin/Release/**/*.dll"
-                    ]
+                    "src": "../source-repo/src/Yak2D/bin/Release",
+                    "files": [ "**/*.dll" ]
+                  },
+                  {
+                    "src": "../source-repo/src/Yak2D.Api/bin/Release",
+                    "files": [ "**/*.dll" ]
                   }
                 ],
                 "dest": "api",
@@ -104,24 +113,37 @@ jobs:
 
           docfx metadata .tmp/api-metadata.json
 
+          echo "API folder contents after metadata generation:"
+          ls -la api
+
       - name: Build docs site
+        shell: bash
         working-directory: docs
         run: |
           set -euxo pipefail
           docfx build docfx.json
 
+      - name: Show generated API site files
+        shell: bash
+        run: |
+          set -euxo pipefail
+          ls -la docs/_site/api || true
+
       - name: Clear published docs repo
+        shell: bash
         working-directory: publish-repo
         run: |
           set -euxo pipefail
           find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
 
       - name: Copy generated site into published docs repo
+        shell: bash
         run: |
           set -euxo pipefail
           cp -a docs/_site/. publish-repo/
 
       - name: Commit and push published site
+        shell: bash
         working-directory: publish-repo
         env:
           GIT_AUTHOR_NAME: Automated Documentation Builder
@@ -130,13 +152,10 @@ jobs:
           GIT_COMMITTER_EMAIL: nomail@alzpatz.org
         run: |
           set -euxo pipefail
-
           git add -A
-
           if git diff --cached --quiet; then
             echo "No documentation changes to publish."
             exit 0
           fi
-
           git commit -m "Automated Documentation Site Update"
           git push origin HEAD:master
