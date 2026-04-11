@@ -3,10 +3,11 @@
     "content": [
       {
         "files": [
-          "api/**.yml",
+          "api/*.yml",
+          "api/**/*.yml",
           "api/index.md",
-          "api/**/toc.yml",
-          "api/toc.yml"
+          "api/toc.yml",
+          "api/**/toc.yml"
         ]
       },
       {
