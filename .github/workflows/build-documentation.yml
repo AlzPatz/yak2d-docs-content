@@ -48,13 +48,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Show .NET info
-        shell: bash
-        run: |
-          set -euxo pipefail
-          dotnet --info
-          dotnet --list-sdks
-
       - name: Restore source projects
         shell: bash
         working-directory: source-repo
@@ -76,6 +69,7 @@ jobs:
         working-directory: source-repo
         run: |
           set -euxo pipefail
+          echo "=== BUILT DLLS AND XML FILES ==="
           find . -type f \( -name '*.dll' -o -name '*.xml' \) | sort
 
       - name: Install DocFX
@@ -94,7 +88,7 @@ jobs:
 
           mkdir -p api
 
-          # Keep hand-written files like api/index.md and api/toc.yml
+          # Keep handwritten files
           find api -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \) ! -name 'toc.yml' -delete
 
           cat > api-metadata.json <<'EOF'
@@ -125,8 +119,8 @@ jobs:
 
           docfx metadata api-metadata.json
 
-          echo "API folder contents after metadata generation:"
-          ls -la api
+          echo "=== FILES IN docs/api AFTER METADATA ==="
+          find api -maxdepth 2 -type f | sort
 
       - name: Build docs site
         shell: bash
@@ -139,7 +133,8 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          ls -la docs/_site/api || true
+          echo "=== FILES IN docs/_site/api AFTER BUILD ==="
+          find docs/_site/api -maxdepth 2 -type f | sort || true
 
       - name: Clear published docs repo
         shell: bash
