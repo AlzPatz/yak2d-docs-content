@@ -71,6 +71,13 @@ jobs:
           dotnet build src/Yak2D/Yak2D.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
           dotnet build src/Yak2D.Api/Yak2D.Api.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
 
+      - name: Show built DLLs
+        shell: bash
+        working-directory: source-repo
+        run: |
+          set -euxo pipefail
+          find . -type f \( -name '*.dll' -o -name '*.xml' \) | sort
+
       - name: Install DocFX
         shell: bash
         run: |
