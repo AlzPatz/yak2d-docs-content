@@ -86,32 +86,37 @@ jobs:
           set -euxo pipefail
 
           mkdir -p api
-          mkdir -p .tmp
 
+          # Keep hand-written files like api/index.md and api/toc.yml
           find api -maxdepth 1 -type f \( -name '*.yml' -o -name '*.yaml' \) ! -name 'toc.yml' -delete
 
-          cat > .tmp/api-metadata.json <<'EOF'
+          cat > api-metadata.json <<'EOF'
           {
             "metadata": [
               {
                 "src": [
                   {
                     "src": "../source-repo/src/Yak2D/bin/Release",
-                    "files": [ "**/*.dll" ]
+                    "files": [
+                      "**/*.dll"
+                    ]
                   },
                   {
                     "src": "../source-repo/src/Yak2D.Api/bin/Release",
-                    "files": [ "**/*.dll" ]
+                    "files": [
+                      "**/*.dll"
+                    ]
                   }
                 ],
                 "dest": "api",
+                "outputFormat": "apiPage",
                 "disableDefaultFilter": false
               }
             ]
           }
           EOF
 
-          docfx metadata .tmp/api-metadata.json
+          docfx metadata api-metadata.json
 
           echo "API folder contents after metadata generation:"
           ls -la api
