@@ -1,5 +1,7 @@
-- name: Yak2D Usage
+- name: Manual
   href: articles/
-- name: Api Documentation
+- name: Tutorials
+  href: tutorials/
+- name: API Reference
   href: api/
   homepage: api/index.md

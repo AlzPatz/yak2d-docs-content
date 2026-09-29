@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The example code used throughout the yak2D documentation guides.
+       Run any example by name, e.g. (dotnet run, then the name) DrawingBasics
+       Run with no arguments to list them all -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Yak2D" Version="1.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Textures\**" />
+    <EmbeddedResource Include="Fonts\**" />
+    <EmbeddedResource Include="Shaders\**" />
+  </ItemGroup>
+
+</Project>

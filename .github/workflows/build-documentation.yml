@@ -48,6 +48,15 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Build documentation code (every example must compile against the latest Yak2D package)
+        shell: bash
+        working-directory: docs/code
+        run: |
+          set -euxo pipefail
+          for project in GettingStarted/MyFirstYakApp YakRun/Part1 YakRun/Part2 YakRun/Part3 YakRun/Part4 Snippets CustomShader; do
+            dotnet build "$project" -c Release
+          done
+
       - name: Restore source projects
         shell: bash
         working-directory: source-repo

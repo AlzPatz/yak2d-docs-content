@@ -1,35 +1,56 @@
 - name: Introduction
   href: intro.md
-- name: Framework Features
+- name: Features
   href: features.md
-- name: Overview and Basic Usage
-  href: overview.md
-- name: Key Concepts
+- name: Core concepts
   items:
+    - name: How yak2D works
+      href: overview.md
+    - name: Application lifecycle
+      href: lifecycle.md
+    - name: Configuration
+      href: configuration.md
+    - name: Resources and references
+      href: resources.md
+    - name: Coordinate systems
+      href: coordinatesystems.md
     - name: Glossary
       href: glossary.md
-    - name: Application Lifecycle
-      href: lifecycle.md
-    - name: Coordinate Systems
-      href: coordinatesystems.md
-- name: Framework Components
-  items: 
-    - name: RenderStages
-      href: renderstages.md
-    - name: Surfaces
-      href: surfaces.md
+- name: Guides
+  items:
+    - name: Assets (textures, fonts, shaders)
+      href: assets.md
+    - name: Drawing
+      href: drawing.md
+    - name: Text
+      href: text.md
+    - name: Cameras
+      href: cameras.md
     - name: Viewports
       href: viewports.md
-- name: Tutorials
-  href: tutorials.md
+    - name: Surfaces and render targets
+      href: surfaces.md
+    - name: The render queue and render stages
+      href: renderstages.md
+    - name: Post-processing effects
+      href: effects.md
+    - name: Distortion
+      href: distortion.md
+    - name: 3D meshes
+      href: mesh.md
+    - name: Custom shaders
+      href: customshaders.md
+    - name: Custom Veldrid stages
+      href: customveldrid.md
+    - name: Reading pixels back (GPU to CPU)
+      href: readback.md
+    - name: Input
+      href: input.md
+    - name: Window, display and graphics API
+      href: window.md
+- name: Help
   items:
-    - name: Getting Started - Blank Project
-      href: gettingstarted.md
-    - name: Getting Started - Continued
-      href: continued.md
-    - name: Building the Samples "DemoGame"
-      href: demogame.md
-    - name: Creating a CustomShader
-      href: tutorialcustomshader.md
-    - name: Distributing an Application
-      href: tutorialdistribution.md
+    - name: Troubleshooting and FAQ
+      href: troubleshooting.md
+    - name: The samples
+      href: samples.md

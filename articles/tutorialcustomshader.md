@@ -1,4 +1,3 @@
 ---
-uid: uid_tut_customshader
+redirect_url: ../tutorials/customshader.html
 ---
-# Tutorial - CustomShader

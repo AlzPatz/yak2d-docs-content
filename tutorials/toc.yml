@@ -1,0 +1,18 @@
+- name: Tutorials
+  href: index.md
+- name: Getting Started
+  href: gettingstarted.md
+- name: "Yak Run: a platform game"
+  items:
+    - name: "1. A yak on screen"
+      href: yakrun-1.md
+    - name: "2. Running and jumping"
+      href: yakrun-2.md
+    - name: "3. Building a level"
+      href: yakrun-3.md
+    - name: "4. Effects and polish"
+      href: yakrun-4.md
+- name: Writing a custom shader
+  href: customshader.md
+- name: Distributing your game
+  href: distribution.md

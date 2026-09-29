@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- yak2D resources are created in CreateResources() rather than constructors,
+         so nullable reference warnings on those fields would just be noise here -->
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Yak2D" Version="1.*" />
+  </ItemGroup>
+
+  <!-- Embed every file in the Textures folder into the application assembly -->
+  <ItemGroup>
+    <EmbeddedResource Include="Textures\**" />
+  </ItemGroup>
+
+</Project>

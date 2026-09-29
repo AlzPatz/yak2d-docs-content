@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Documentation capture harness (not part of the published docs).
+    Wraps a documentation IApplication, optionally scripts its keyboard input,
+    and saves a PNG of the rendered frame at a chosen time.
+
+    Build against a target project, e.g.
+      dotnet run -c Release -p:DocsTarget=../../YakRun/Part4 (then pass: app, out, seconds arguments)
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>Harness</RootNamespace>
+    <AssemblyName>Harness</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocsTargetDir Condition="'$(DocsTarget)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(DocsTarget)'))))</DocsTargetDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Yak2D" Version="1.*" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+  </ItemGroup>
+
+  <!-- The framework looks for embedded assets in the assembly that implements IApplication. Here that is the
+       harness (it wraps the real app), so the target project's asset folders are linked in with the same layout -->
+  <ItemGroup Condition="'$(DocsTargetDir)' != ''">
+    <ProjectReference Include="$(DocsTargetDir)/*.csproj" />
+    <EmbeddedResource Include="$(DocsTargetDir)/Textures/**" LinkBase="Textures" />
+    <EmbeddedResource Include="$(DocsTargetDir)/Fonts/**" LinkBase="Fonts" />
+    <EmbeddedResource Include="$(DocsTargetDir)/Shaders/**" LinkBase="Shaders" />
+  </ItemGroup>
+
+</Project>

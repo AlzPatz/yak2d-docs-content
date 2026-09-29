@@ -14,8 +14,13 @@
         "files": [
           "articles/**.md",
           "articles/**/toc.yml",
+          "tutorials/**.md",
+          "tutorials/**/toc.yml",
           "toc.yml",
           "*.md"
+        ],
+        "exclude": [
+          "README.md"
         ]
       }
     ],
@@ -29,13 +34,22 @@
     ],
     "dest": "_site",
     "globalMetadata": {
+      "_appName": "yak2D",
+      "_appTitle": "yak2D",
+      "_appFooter": "yak2D - Alex Paterson - MIT licence",
+      "_appLogoPath": "images/logo.png",
+      "_appFaviconPath": "favicon.ico",
+      "_enableSearch": true,
       "_disableContribution": true,
-      "_appFooter": "yak2D - Alex Paterson",
-      "_appLogoPath": "images/logo.png"
+      "_gitContribute": {
+        "repo": "https://github.com/AlzPatz/yak2d-docs-content",
+        "branch": "master"
+      }
     },
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default",
+      "modern"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",

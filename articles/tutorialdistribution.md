@@ -1,4 +1,3 @@
 ---
-uid: uid_tut_distribution
+redirect_url: ../tutorials/distribution.html
 ---
-# Tutorial - Distributing your Application

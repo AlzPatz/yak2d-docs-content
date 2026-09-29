@@ -1,4 +1,3 @@
 ---
-uid: uid_tut_demogame
+redirect_url: ../tutorials/yakrun-1.html
 ---
-# Building the **DemoGame**

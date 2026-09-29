@@ -1,4 +1,3 @@
 ---
-uid: uid_rendertargets
+redirect_url: surfaces.html
 ---
-# RenderTargets
