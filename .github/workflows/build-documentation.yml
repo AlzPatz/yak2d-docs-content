@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout documentation source repo
@@ -46,7 +46,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
       - name: Restore source projects
         shell: bash
@@ -54,15 +54,13 @@ jobs:
         run: |
           set -euxo pipefail
           dotnet restore src/Yak2D/Yak2D.csproj
-          dotnet restore src/Yak2D.Api/Yak2D.Api.csproj
 
       - name: Build source projects
         shell: bash
         working-directory: source-repo
         run: |
           set -euxo pipefail
-          dotnet build src/Yak2D/Yak2D.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
-          dotnet build src/Yak2D.Api/Yak2D.Api.csproj -c Release --no-restore -p:GenerateDocumentationFile=true
+          dotnet build src/Yak2D/Yak2D.csproj -c Release --no-restore -p:GenerateDocumentationFile=true -p:CopyLocalLockFileAssemblies=true
 
       - name: Show built DLLs
         shell: bash
@@ -99,13 +97,8 @@ jobs:
                   {
                     "src": "../source-repo/src/Yak2D/bin/Release",
                     "files": [
-                      "**/*.dll"
-                    ]
-                  },
-                  {
-                    "src": "../source-repo/src/Yak2D.Api/bin/Release",
-                    "files": [
-                      "**/*.dll"
+                      "**/Yak2D.dll",
+                      "**/Yak2D.Api.dll"
                     ]
                   }
                 ],

@@ -7,8 +7,8 @@ uid: uid_tut_continued
 Expand the blank project created in the [first tutorial](xref:uid_tut_gettingstarted) to:
 
 1. Add a texture to the project
-2. Draw the texture to an off-screen [RenderTarget](xref:rendertargets)
-3. Apply a built in graphical effect (using a [RenderStage](xref:uid_renderstages)) to the contents of the off-screen [RenderTarget](xref:rendertargets) and display this on the screen
+2. Draw the texture to an off-screen [RenderTarget](xref:uid_rendertargets)
+3. Apply a built in graphical effect (using a [RenderStage](xref:uid_renderstages)) to the contents of the off-screen [RenderTarget](xref:uid_rendertargets) and display this on the screen
 
 ## Prerequisites 
 * Completion of [Getting Started (part 1)](xref:uid_tut_gettingstarted)
@@ -57,9 +57,9 @@ Create a variable in `MyApplication.cs` to store a reference to an [ITexture](xr
 ```csharp
 private ITexture _texture;
 ```
-We load the [ITexture](xref:Yak2D.ITexture) in `MyApplication.cs`'s [CreateResources()](xref:Yak2D.IApplication.CreateResources) method. As a reminder, all [resource](xref:uid_glossary#Resource) creation should be completed within, or be triggered by, this method. 
+We load the [ITexture](xref:Yak2D.ITexture) in `MyApplication.cs`'s [CreateResources()](xref:Yak2D.IApplication.CreateResources*) method. As a reminder, all [resource](xref:uid_glossary#resource) creation should be completed within, or be triggered by, this method. 
 
-Assuming you have named your Texture `logo.png`, modify [CreateResources()](xref:Yak2D.IApplication.CreateResources) to load the texture using the following:
+Assuming you have named your Texture `logo.png`, modify [CreateResources()](xref:Yak2D.IApplication.CreateResources*) to load the texture using the following:
 
 ```csharp
 public bool CreateResources(IServices yak)

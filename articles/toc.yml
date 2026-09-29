@@ -21,7 +21,7 @@
     - name: Viewports
       href: viewports.md
 - name: Tutorials
-  href: tutorials
+  href: tutorials.md
   items:
     - name: Getting Started - Blank Project
       href: gettingstarted.md
