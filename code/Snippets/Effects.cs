@@ -66,15 +66,21 @@ public class ColourEffectsExample : EffectExample
         var negative = none;
         negative.Negative = 1.0f;
         yak.Stages.SetColourEffectsConfig(_negative, negative);
-        #endregion
 
+        CreateQuarters(yak);
+        return true;
+    }
+    #endregion
+
+    // Four viewports, one per quarter of the window, and the labels
+    private void CreateQuarters(IServices yak)
+    {
         _quarters = new[]
         {
             yak.Stages.CreateViewport(0, 0, 480, 270), yak.Stages.CreateViewport(480, 0, 480, 270),
             yak.Stages.CreateViewport(0, 270, 480, 270), yak.Stages.CreateViewport(480, 270, 480, 270),
         };
         CreateLabels(yak);
-        return true;
     }
 
     public override void Drawing(IDrawing draw, IFps fps, IInput input, ICoordinateTransforms transforms, float secondsSinceLastDraw, float secondsSinceLastUpdate)
@@ -97,10 +103,10 @@ public class ColourEffectsExample : EffectExample
         q.ColourEffects(_tint, _yak, windowRenderTarget);
         q.SetViewport(_quarters[3]);
         q.ColourEffects(_negative, _yak, windowRenderTarget);
-        #endregion
 
         RenderLabels(q, windowRenderTarget);
     }
+    #endregion
 }
 
 public class ColourTransition : Example
