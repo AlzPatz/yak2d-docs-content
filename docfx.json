@@ -20,7 +20,8 @@
           "*.md"
         ],
         "exclude": [
-          "README.md"
+          "README.md",
+          "CLAUDE.md"
         ]
       }
     ],
