@@ -17,6 +17,8 @@ For a step-by-step walk-through, see the **[Custom Shader tutorial](../tutorials
 | File(s) | `Shaders/<Name>.glsl` | `Shaders/Vulkan/<Name>.spv`, `Shaders/OpenGL/<Name>.glsl`, `Shaders/Direct3D/<Name>.hlsl.bytes`, `Shaders/Metal/<Name>.metallib` |
 | Runs on | every API, compiled at runtime | only the APIs you provide files for |
 
+A precompiled OpenGL shader declares one `uniform sampler2D Sampler_<Name>` per `Texture` description, `<Name>` being the description's `Name`.
+
 With SPIR-V compile, yak2D compiles your GLSL when the stage is created and cross-compiles it for whichever graphics API is in use. It is by far the easiest option, and the one used in these docs. Precompiled shaders avoid the (small) runtime compile cost, but you have to produce each version yourself (with tools such as `glslangValidator`, SPIRV-Cross and `fxc`). The `Shaders` folder follows the same [embedded or file rules](assets.md) as other assets.
 
 ## Creating the stage
@@ -70,7 +72,8 @@ void main()
 Rules that matter:
 
 - **The uniform block name must be exactly the description's `Name`.** On OpenGL, blocks are matched by name; a mismatch is silently ignored and the shader sees zeros. (Vulkan matches by set and binding, so it may appear to work there anyway.)
-- **Texture first, sampler second** within a texture's set (bindings 0 and 1). The `Texture_<Name>` / `Sampler_<Name>` naming shown is a sensible convention.
+- **Texture first, sampler second** within a texture's set: the texture at binding 0, the sampler at binding 1. Swapped, some Vulkan drivers still show the right image and others show a wrong or flickering one.
+- **The texture must be named `Texture_<Name>` and the sampler `Sampler_<Name>`**, where `<Name>` is the description's `Name`. On OpenGL, textures are matched by name, as blocks are; with a wrong name every texture reads from texture unit 0, so a one-texture shader works by accident and a shader with more textures reads the wrong one. (Vulkan matches by set and binding, so it may appear to work there anyway.)
 - **Data blocks must be a multiple of 16 bytes**, and the C# struct's layout must match the GLSL layout exactly. GLSL's `std140` rules align a `vec3` or `vec4` to 16 bytes, so pad with spare floats or `Vector4`s, or set explicit `[FieldOffset]`s. `SizeInBytes` in the description must be the struct's size.
 - **Texture coordinates** in `FTex` run from (0,0) at the top-left to (1,1) at the bottom-right on every graphics API; yak2D's vertex shader takes care of the differences.
 

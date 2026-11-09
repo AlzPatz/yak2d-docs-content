@@ -29,13 +29,13 @@ Create `Shaders/Wavy.glsl`:
 Shaders are written in **GLSL**, a C-like language. Going through it:
 
 - `#version 450` says which version of GLSL this is. yak2D compiles it with the Vulkan flavour of GLSL 4.50, and converts it to whatever the current graphics API needs.
-- **The texture**, `Texture_Texture` and `Sampler_Texture`: the image we will read. In modern GLSL a texture and its *sampler* (which says how to filter it) are separate, at bindings 0 and 1 of the same set.
+- **The texture**, `Texture_Texture` and `Sampler_Texture`: the image we will read. In modern GLSL a texture and its *sampler* (which says how to filter it) are separate, at bindings 0 and 1 of the same set. Their names follow the description's `Name` (here `"Texture"`): `Texture_<Name>` and `Sampler_<Name>`.
 - **The settings**: a `uniform` block called `Settings`, with our own values in it. Every pixel sees the same values; we set them from C# each frame.
 - **`FTex`**: the input from yak2D's vertex shader, the position of this pixel as a texture coordinate, from (0,0) at the top-left of the output to (1,1) at the bottom-right.
 - **`fragColor`**: the output, the pixel's colour.
 - **`main()`** runs once per pixel. It nudges the coordinate it reads the texture at by a sine wave that changes over time (the ripple), reads the texture there, then mixes in a version with its red and blue channels rotated (the colour cycling). `Amount` controls both.
 
-The `set` numbers must match the order of the uniform descriptions we give yak2D in C#, and the uniform block's name must match its description's `Name`. Those are the only links between the two sides.
+The `set` numbers must match the order of the uniform descriptions we give yak2D in C#, the uniform block's name must match its description's `Name`, and the texture and sampler must be named `Texture_<Name>` and `Sampler_<Name>` after theirs. Those are the only links between the two sides.
 
 ## 3. The C# side
 
@@ -98,6 +98,8 @@ public StartupConfig Configure()
 - **An exception when the stage is created, mentioning `GLSL compilation failed`**: a mistake in the shader. The message gives the line number.
 - **"Unable to load shader file" in the console**: the file is not in the embedded `Shaders` folder, or the name passed to `CreateCustomShaderStage()` is wrong (it has no extension or folder).
 - **Your settings have no effect on one graphics API**: the uniform block's name does not match the description's `Name`. OpenGL matches them by name.
+- **A texture reads wrong, or another texture shows instead, on OpenGL only**: the texture and sampler names do not match the description's `Name`. They must be `Texture_<Name>` and `Sampler_<Name>`; OpenGL matches them by name.
+- **Flicker or a wrong image on some Vulkan drivers only**: the texture and sampler bindings are swapped. The texture goes at binding 0 and the sampler at binding 1.
 - **Garbage values**: the C# struct's layout does not match the shader's. Check the padding.
 
 ## Using a shader as a post-process
