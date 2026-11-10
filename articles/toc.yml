@@ -2,6 +2,10 @@
   href: intro.md
 - name: Features
   href: features.md
+- name: What's new
+  href: whatsnew.md
+- name: Cheat sheet
+  href: cheatsheet.md
 - name: Core concepts
   items:
     - name: How yak2D works
@@ -48,6 +52,8 @@
       href: input.md
     - name: Window, display and graphics API
       href: window.md
+- name: Cookbook
+  href: cookbook.md
 - name: Help
   items:
     - name: Troubleshooting and FAQ

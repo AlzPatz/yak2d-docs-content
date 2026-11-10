@@ -117,9 +117,6 @@ Not strictly an effect, but [q.Copy(source, target)](xref:Yak2D.IRenderQueue.Cop
 
 Each effect is one or more full-screen passes over its target, so cost grows with the target's size. Blur and bloom do most of their work on the smaller sample surface given when the stage is created, so reducing that size is the quickest way to make them cheaper. Rendering the whole pipeline at a fixed resolution (for example 960 x 540 render targets) and letting the last step stretch it to the window keeps the cost the same on any display.
 
-> [!NOTE]
-> **Known issue:** partly transparent shapes drawn onto a render target leave its alpha slightly below 1 there, and the colour effects and distortion stages then show those pixels darker than expected. See [Drawing: Blend states](drawing.md#blend-states).
-
 ## See also
 
 - [Distortion](distortion.md), [3D meshes](mesh.md), [Custom shaders](customshaders.md)

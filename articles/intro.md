@@ -17,6 +17,8 @@ uid: uid_intro
 | **[Tutorials](../tutorials/index.md)** | Learn by building. Start here if you are new. |
 | **Manual: Core concepts** | Understand how a yak2D application is put together. Short, and worth reading once. |
 | **Manual: Guides** | Learn a feature area in depth (drawing, cameras, effects, input...), with working examples. |
+| **[Cookbook](cookbook.md)** | Copy a ready-made answer to a common game task: sprite animation, screen shake, fades, parallax, particles, HUDs. |
+| **[Cheat sheet](cheatsheet.md)** | See everyday yak2D on one page: the lifecycle, services, drawing and rendering calls, input. |
 | **[API Reference](../api/index.md)** | Look up every type, method and parameter. Generated from the source code. |
 | **[Samples](samples.md)** | Browse ~35 small, runnable demo projects, one per feature. |
 
@@ -25,7 +27,7 @@ uid: uid_intro
 1. **[Getting Started](../tutorials/gettingstarted.md)**: install .NET, create a project and open a window (10 minutes).
 2. **[How yak2D works](overview.md)**: the handful of ideas the whole framework is built on.
 3. **[Yak Run tutorial](../tutorials/yakrun-1.md)**: build a small platform game in four parts, using most of yak2D's features along the way.
-4. Dip into the **Guides** as you need them, and keep the **API Reference** open while you code.
+4. Dip into the **Guides** and the **[Cookbook](cookbook.md)** as you need them, and keep the **[Cheat sheet](cheatsheet.md)** and **API Reference** open while you code.
 
 ## Conventions used in these docs
 
@@ -37,4 +39,4 @@ uid: uid_intro
 
 ## Getting help
 
-If something in yak2D or these docs doesn't work the way you expect, check [Troubleshooting and FAQ](troubleshooting.md), then [raise an issue on GitHub](https://github.com/AlzPatz/yak2d/issues).
+If something in yak2D or these docs doesn't work the way you expect, check [Troubleshooting and FAQ](troubleshooting.md) and make sure you have the latest package ([What's new](whatsnew.md)), then [raise an issue on GitHub](https://github.com/AlzPatz/yak2d/issues).

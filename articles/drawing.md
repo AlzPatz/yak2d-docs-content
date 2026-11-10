@@ -163,11 +163,22 @@ A draw stage's [BlendState](xref:Yak2D.BlendState) sets how each new pixel combi
 | `AdditiveAlpha` | The new colour (scaled by its alpha) is *added* to the old. Overlaps get brighter. | Light, fire, sparks, glows. |
 | `AdditiveComponentWise` | Red, green, blue and alpha are all added. | Accumulating values, special effects. |
 | `Override` | The new pixel simply replaces the old, including its alpha. | Copying, or drawing things that must not blend. |
+| `Premultiplied` | Like `Alpha`, but for source colours that are *already* multiplied by their alpha. | Drawing a transparent [render target](surfaces.md) (one that was drawn into with `Alpha`) over something else. |
 
-The blend state belongs to the whole stage, so use a separate stage for, say, additive particle effects.
+The blend state belongs to the whole stage, so use a separate stage for, say, additive particle effects. Pass it when creating the stage:
+
+```csharp
+var sparks = yak.Stages.CreateDrawStage(true, BlendState.AdditiveAlpha);
+```
+
+### Transparent render targets and `Premultiplied`
+
+Drawing with `Alpha` onto a surface that is opaque behaves exactly as you would expect, and the surface stays opaque. Drawing onto a surface cleared to transparent (`Colour.Clear`) stores *premultiplied* colour: each pixel's colour is already scaled by its coverage, and its alpha says how much of whatever is behind it should show through.
+
+To draw such a surface over something else, use a stage with `BlendState.Premultiplied`. Using `Alpha` instead would scale the colour by alpha a second time, so soft and semi-transparent edges come out too dark. The [Cookbook](cookbook.md#a-transparent-layer-over-a-scene) shows the two side by side.
 
 > [!NOTE]
-> **Known issue:** with `Alpha` blending, drawing a partly transparent shape onto an opaque render target leaves the target's *alpha* slightly below 1 where the shape was drawn. Copying the target is unaffected, but some effect stages (for example [colour effects](effects.md#colour-effects) and [distortion](distortion.md)) then show those pixels darker than expected. If translucent shapes look too dark after an effect, draw them fully opaque where you can.
+> `Premultiplied`, and the correct alpha behaviour described here, arrived in **yak2D 1.2.0**. Before that, translucent shapes drawn onto a render target could look too dark after an effect such as [colour effects](effects.md#colour-effects) or [distortion](distortion.md). See [What's new](whatsnew.md).
 
 ## Drawing things once
 

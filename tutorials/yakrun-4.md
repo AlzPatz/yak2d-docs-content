@@ -95,9 +95,10 @@ Because the whole scene is rendered at a fixed 960 x 540 and the last step (bloo
 You have used most of yak2D's building blocks. Some ideas for taking Yak Run further, and where to look:
 
 - **Enemies and moving platforms**: more game objects with their own `Update()` and `Draw()`, like `Yak`.
-- **A title screen and pause menu**: a game state enum, a blurred copy of the game behind the menu ([Blur](../articles/effects.md#blur)), and text.
-- **Sprite sheet animation**: several frames in one texture, chosen with texture coordinates ([Drawing](../articles/drawing.md#texture-coordinates-wrapping-and-filtering)).
-- **Particles**: many small, short-lived shapes on a draw stage with `BlendState.AdditiveAlpha` ([Blend states](../articles/drawing.md#blend-states)).
+- **A title screen and pause menu**: a game state enum, a [fade between screens](../articles/cookbook.md#fade-to-black-between-scenes), a blurred copy of the game behind the menu ([Blur](../articles/effects.md#blur)), and [pausing when the window loses focus](../articles/cookbook.md#full-screen-and-pause).
+- **Sprite sheet animation**: several frames in one texture, chosen with texture coordinates ([Cookbook recipe](../articles/cookbook.md#sprite-sheet-animation)).
+- **Particles**: dust when the yak lands, sparkles when a star is collected: many small, short-lived shapes on a draw stage with `BlendState.AdditiveAlpha` ([Cookbook recipe](../articles/cookbook.md#particles)).
+- **Screen shake** when the yak lands hard ([Cookbook recipe](../articles/cookbook.md#screen-shake)).
 - **A retro look**: render the world into a small render target with point sampling ([Surfaces](../articles/surfaces.md#example-a-retro-low-resolution-look)), or add the CRT style effect ([Style effects](../articles/effects.md#style-effects)).
 - **Your own effect**: [write a custom shader](customshader.md).
 - **Share it**: [distribute your game](distribution.md).

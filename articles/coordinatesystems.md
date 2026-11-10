@@ -4,105 +4,66 @@ uid: uid_coordinatesystems
 
 # Coordinate systems
 
-## RenderStage Output
+Every position you give yak2D is in one of three coordinate systems, or *spaces*. Two of them are for drawing, and one is the window's own pixel grid. This page explains each, how a camera connects them, and how to convert between them (for example, to find what the mouse is pointing at).
 
-A RenderStage's output is render area size agnostic. This means that a [RenderStage](xref:uid_renderstages)'s output will fill the entire destination [render area](xref:uid_glossary#renderarea), which is either an entire [RenderTarget](xref:uid_surfaces) or a rectangular area of one defined by a [viewport](xref:uid_viewports). 
+## The three spaces at a glance
 
-The pixel size of the [render area](xref:uid_glossary#renderarea) does not matter. 
+| Space | Origin (0,0) | +X | +Y | Units | Use it for |
+|---|---|---|---|---|---|
+| [**World**](#world-space) | a fixed point in your game world | right | **up** | world units | the game world: it moves, zooms and rotates with the camera |
+| [**Screen**](#screen-space) | the centre of the camera's view | right | **up** | the camera's virtual resolution | HUDs, menus, overlays: fixed to the view |
+| [**Window**](#window-space) | the top-left corner of the window | right | **down** | real pixels | the mouse position, and viewports |
 
-However, if the aspect ratio of the destination [render area](xref:uid_glossary#renderarea) does not match that of the [RenderStage](xref:uid_renderstages)'s output, the output will be distorted (stretched or squashed) to fit.
+Draw requests choose World or Screen with their [CoordinateSpace](xref:Yak2D.CoordinateSpace). Window space is never used for drawing.
 
-## Drawing
+## Virtual resolution: why the window size doesn't matter
 
-During [Drawing](xref:uid_glossary#drawing), [DrawRequests](xref:Yak2D.DrawRequest) are submitted to, and rendered by, a [DrawStage](xref:Yak2D.IDrawStage). The final position of vertices upon the [render area](xref:uid_glossary#renderarea) is transformed by the assigned [Camera2D](xref:Yak2D.ICamera2D).
+Draw stages are rendered through a [2D camera](cameras.md), and each camera has a **virtual resolution**, for example 960 x 540. That is how many units the camera shows across and down, whatever the real size of the window or render target it renders onto.
 
-Each [Camera2D](xref:Yak2D.ICamera2D) has a [virtual resolution](xref:uid_glossary#virtual-resolution) that defines the boundaries of [screen space](xref:uid_coordinatesystems#screen-space) as well as [world space](xref:uid_coordinatesystems#world-space) once a camera's zoom, world focus point and rotation are also accounted for.
+A render stage's output always fills its whole *render area*: the entire render target, or the part of it set by a [viewport](viewports.md). So a 960 x 540 camera rendering onto a 1920 x 1080 window draws everything at twice the size, and onto a 640 x 360 render target at two thirds. You design your game once, in the camera's units, and it fits any display.
 
-## What this means in practice
+> [!IMPORTANT]
+> If the render area's shape (aspect ratio) differs from the camera's virtual resolution, the picture is stretched or squashed to fit. Keep them in the same proportion. See [Cameras: Virtual resolution](cameras.md#virtual-resolution).
 
-A user can choose a [virtual resolution](xref:uid_glossary#virtual-resolution) and draw everything in relation to these effective screen dimensions, but it can be rendered at a final real resolution chosen simply by the an appropriately sized [render area](xref:uid_glossary#renderarea).  
+## Screen space
 
-## Coordinate Systems (***spaces***)
+![Screen space: origin in the centre, y up, edges at plus and minus half the virtual resolution](../images/screenspace.png)
 
-**yak2D** uses 3 coordinate systems (or ***spaces***) for 2D rendering:
+Draw with [CoordinateSpace.Screen](xref:Yak2D.CoordinateSpace) for things fixed to the view. The origin is the centre of the camera's view, +x is right and +y is **up**. The camera's position, zoom and rotation have no effect.
 
-1. [**Screen**](xref:uid_coordinatesystems#screen-space) space
-2. [**World**](xref:uid_coordinatesystems#world-space) space
-3. [**Window**](xref:uid_coordinatesystems#window-space) space
+For a camera with virtual resolution `w` x `h`, the visible area is:
 
-### **Screen Space**
-The coordinate system used when drawing with [CoordinateSpace.Screen](xref:Yak2D.CoordinateSpace). Positions are defined in relation to a fixed visible area defined by the camera's [virtual resolution](xref:uid_glossary#virtual-resolution).
+- `-w/2 <= x < w/2`
+- `-h/2 <= y < h/2`
 
-The origin (0,0) is located in the centre. Positive X-axis runs from left to right, with positive Y-axis running 'upwards' towards the top of the visible area.
+So for a 960 x 540 camera, the left and right edges are at x = -480 and 480, and the top and bottom at y = 270 and -270. A score in the top-right corner might go at `(460, 250)`. The [HUD recipe](cookbook.md#a-hud-health-bar-score-and-fps) shows this in practice.
 
-Visible positions in screen space are defined by:
+## World space
 
-`-w/2 <= x < w/2`
+Draw with [CoordinateSpace.World](xref:Yak2D.CoordinateSpace) for everything that is part of the game world. The axes are the same as screen space (+x right, +y up), but what is visible depends on the camera:
 
-and...
+- **Focus**: the world position at the centre of the view.
+- **Zoom**: the view shows `w / zoom` by `h / zoom` world units. A zoom of 2 shows half as much, twice as big.
+- **Rotation**: the view is turned clockwise by the camera's angle, in radians.
 
-`-h/2 <= y < h/2`
+With the focus at (0,0), a zoom of 1 and no rotation, world space and screen space line up exactly. Move the camera with [SetCamera2DFocusZoomAndRotation()](xref:Yak2D.ICameras.SetCamera2DFocusZoomAndRotation*) and its relatives; see [Cameras](cameras.md#moving-zooming-and-rotating).
 
-where:
-- w = [virtual resolution](xref:uid_glossary#virtual-resolution) width
-- h = [virtual resolution](xref:uid_glossary#virtual-resolution) height
+> [!TIP]
+> Both world and screen space put +y **up**, like a maths graph, so jumping means *adding* to y and gravity *subtracts* from it. Window space is the odd one out.
 
-#### Screen Space Diagram
-![](../images/screenspace.png)
+## Window space
 
-### **World Space**
-The coordinate system used when drawing with [CoordinateSpace.World](xref:Yak2D.CoordinateSpace). Positions are defined in relation to an origin. The visible area is defined by the camera's world focus point (position) in relation to the origin, the camera's zoom scalar, rotation and [virtual resolution](xref:uid_glossary#virtual-resolution).
+![Window space: origin at the top left, y down, in pixels](../images/windowspace.png)
 
-**World space axis are similar to screen space**, in that when unrotated, positive X-axis runs from left to right, with positive Y-axis running 'upwards' towards the top of the visible area.
+Window space is the real pixel grid of the window (or of a render target). The origin is the **top-left** corner, +x is right and +y is **down**. Units are whole pixels, and the visible pixels are:
 
-Therefore, if the camera's world focus point is (0,0), it's zoom is 1.0 and there is no camera rotation, then a position in world space will match a position in screen space.
+- `0 <= x < width`
+- `0 <= y < height`
 
-### **Window Space**
-Window space is used when defining [viewports](xref:uid_viewports) and is the coordinate system used for [mouse position](xref:Yak2D.IInput.MousePosition).
+Two things use window space:
 
-The origin (0,0) of window space is positioned at the top-left corner of the window (or [RenderTarget](xref:uid_surfaces)), with positive X-axis running from left to right, and positive Y-axis running 'downwards' towards the bottom of the window (or [RenderTarget](xref:uid_surfaces)).
-
-Window space units are absolute pixels.
-
-Valid / visible pixel positions in window space are defined by:
-
-`0 <= x < w`
-
-and...
-
-`0 <= y < h`
-
-where:
-- w = Window or [RenderTarget](xref:uid_surfaces) width
-- h = Window or [RenderTarget](xref:uid_surfaces) height
-
-
-#### Window Space Diagram
-![](../images/windowspace.png)
-
-## Viewports
-[Viewports](xref:uid_viewports) are used to define rectangular [render areas](xref:uid_glossary#renderarea) of a [RenderTarget](xref:uid_surfaces). 
-
-Viewport position and size are defined in pixel units and use [window space](xref:uid_coordinatesystems#window-space) coordinates.
-
-## Texture Coordinates
-
-**yak2D** texture coordinates are origin top-left and do not change across any graphics API backends. This is the same as used in Direct3D, Vulkan and Metal APIs, and is the same as [window space](xref:uid_coordinatesystems#window-space).
-
-**Note:** When writing shaders for a [CustomVeldrid](xref:Yak2D.ICustomVeldridStage) [RenderStage](xref:uid_renderstages), the user is responsible for accounting for the backend differences between graphics APIs.
-
-When writing shaders for a [CustomShader](xref:Yak2D.ICustomShaderStage) [RenderStage](xref:uid_renderstages), the vertex shader provided ***already accounts for the differences*** in OpenGL texture coordinates. Therefore all shaders can be written assuming origin top-left.
-
-## 3D Rendering
-
-The [MeshRender](xref:Yak2D.IMeshRenderStage) [RenderStage](xref:uid_renderstages) uses a [Camera3D](xref:Yak2D.ICamera3D) to manage the required view and projection matrices used during rendering. 
-
-**yak2D** uses a Right-Handed coordinate system, which does not change across any graphics API backends. This coordinate system is positive-x towards the right, positive-y upwards and positive-z out of the screen, towards the camera.
-
-**Note:** When writing shaders for a [CustomVeldrid](xref:Yak2D.ICustomVeldridStage) [RenderStage](xref:uid_renderstages), the user is responsible for accounting for the backend differences between graphics APIs.
-
-## Mouse Input
-**yak2D** provides [mouse position](xref:Yak2D.IInput.MousePosition) as a position on the application window, in [window space](xref:uid_coordinatesystems#window-space). Convert it to world or screen space with the helpers below.
+- **The mouse.** [IInput.MousePosition](xref:Yak2D.IInput.MousePosition) is in window pixels. [Convert it](#converting-between-spaces) to world or screen space before comparing it with anything you drew.
+- **Viewports.** [CreateViewport(x, y, width, height)](xref:Yak2D.IStages.CreateViewport*) takes the top-left corner and size of a rectangle of the target, in pixels. See [Viewports](viewports.md).
 
 ## Converting between spaces
 
@@ -114,12 +75,28 @@ The [MeshRender](xref:Yak2D.IMeshRenderStage) [RenderStage](xref:uid_renderstage
 | [WorldFromWindow](xref:Yak2D.ICoordinateTransforms.WorldFromWindow*), [ScreenFromWindow](xref:Yak2D.ICoordinateTransforms.ScreenFromWindow*) | from a window position (such as the mouse) into world or screen space |
 | [WindowFromWorld](xref:Yak2D.ICoordinateTransforms.WindowFromWorld*), [WindowFromScreen](xref:Yak2D.ICoordinateTransforms.WindowFromScreen*) | from world or screen space to a window position |
 
-Methods involving window space take an optional [viewport](xref:uid_viewports), for when the camera is rendered into part of the window, and return a [TransformResult](xref:Yak2D.TransformResult): the converted `Position`, plus `Contained`, which says whether the point is actually inside the camera's view (or, converting to window space, inside the window).
+Methods involving window space take an optional [viewport](viewports.md), for when the camera is rendered into part of the window, and return a [TransformResult](xref:Yak2D.TransformResult): the converted `Position`, plus `Contained`, which says whether the point is actually inside the camera's view (or, converting to window space, inside the window).
 
-A common use is finding what the mouse is pointing at in the game world:
+A common use is finding what the mouse is pointing at in the game world. Here the camera is zoomed and rotated, and clicks still land exactly under the pointer:
 
 ![Mouse picking through a zoomed, rotated camera](../images/guide/mouse-picking.png)
 
 [!code-csharp[](../code/Snippets/TextAndCameras.cs#picking)]
 
 The conversions take the camera's focus, zoom, rotation and virtual resolution into account, and the window's current size, so they keep working when the window is resized.
+
+## Texture coordinates
+
+Texture coordinates pick a point on a texture, from **(0,0) at the top-left** to **(1,1) at the bottom-right**, whatever the texture's size in pixels. Values outside 0 to 1 repeat or mirror the texture, depending on the [TextureCoordinateMode](xref:Yak2D.TextureCoordinateMode). See [Drawing: Texture coordinates](drawing.md#texture-coordinates-wrapping-and-filtering).
+
+The top-left origin is the same on every graphics API. Shaders for [custom shader stages](customshaders.md) can assume it too: the vertex shader yak2D supplies already accounts for OpenGL's differences. In [custom Veldrid stages](customveldrid.md) you write all the GPU code yourself, so the differences between APIs are yours to handle.
+
+## 3D rendering
+
+The [mesh render stage](mesh.md) uses a [3D camera](xref:Yak2D.ICamera3D) for its view and projection. yak2D's 3D space is **right-handed**, the same on every graphics API: +x to the right, +y up, and +z out of the screen, towards the viewer. As with texture coordinates, [custom Veldrid stages](customveldrid.md) must handle any differences between graphics APIs themselves.
+
+## See also
+
+- [Cameras](cameras.md): creating, moving, zooming and rotating cameras
+- [Viewports](viewports.md): rendering into part of a target
+- [Cookbook](cookbook.md): HUDs, parallax and screen shake, all built on these spaces

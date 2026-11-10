@@ -30,4 +30,7 @@ A four part tutorial that builds a small, complete platform game: a yak runs and
 
 ## After the tutorials
 
-The **[Manual](../articles/intro.md)** explains every feature in depth, and the **[samples](../articles/samples.md)** show each one working on its own.
+- **[Cookbook](../articles/cookbook.md)**: short, runnable recipes for common game tasks, from sprite animation and screen shake to particles and HUDs.
+- **[Cheat sheet](../articles/cheatsheet.md)**: everyday yak2D on one page.
+- **[Manual](../articles/intro.md)**: every feature in depth.
+- **[Samples](../articles/samples.md)**: around 35 small projects, each showing one feature working on its own.

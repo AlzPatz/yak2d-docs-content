@@ -27,7 +27,7 @@ uid: uid_features
 - Quads, regular polygons, circles, lines, arrows, outlines and custom polygons.
 - Per-vertex colours, texture tinting, wrapping and mirroring, sprite sheets, flipping.
 - [Layers and depth](drawing.md#layers-and-depth) with correct transparency.
-- [Blend states](drawing.md#blend-states): alpha, additive and override.
+- [Blend states](drawing.md#blend-states): alpha, additive, override and premultiplied (for compositing transparent layers).
 - [Bitmap font text](text.md): a built-in font, BMFont loading, justification, kerning and measuring.
 
 ## Cameras and coordinates

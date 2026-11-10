@@ -13,7 +13,7 @@ Your code: the class implementing [IApplication](xref:Yak2D.IApplication) that y
 A group of consecutive draw requests that share textures and settings, sent to the GPU as one draw call. Draw stages batch automatically after sorting. See [Drawing](drawing.md#layers-and-depth).
 
 ## Blend state
-How a pixel being drawn combines with the pixel already on a surface: normal transparency, additive, or replace. See [Drawing: Blend states](drawing.md#blend-states).
+How a pixel being drawn combines with the pixel already on a surface: normal transparency, additive, replace, or premultiplied. See [Drawing: Blend states](drawing.md#blend-states).
 
 ## Camera
 Decides what part of the world appears on a surface. A **2D camera** ([ICamera2D](xref:Yak2D.ICamera2D)) has a virtual resolution, focus, zoom and rotation and is used by draw and distortion stages. A **3D camera** ([ICamera3D](xref:Yak2D.ICamera3D)) is used by mesh render stages. See [Cameras](cameras.md).

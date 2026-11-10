@@ -37,9 +37,10 @@ uid: uid_troubleshooting
 
 Texture filtering with the `Wrap` mode blends each edge of an image with the opposite edge. Leave a transparent border of a pixel or two round sprite images, or use `TextureCoordinateMode.Mirror`. See [Drawing](drawing.md#texture-coordinates-wrapping-and-filtering).
 
-## Translucent shapes look too dark after an effect
+## Translucent shapes look too dark, or have dark fringes
 
-A known issue: see [Drawing: Blend states](drawing.md#blend-states). Draw them opaque if you can.
+- **After an effect (colour effects, distortion):** this was a bug in yak2D before 1.2.0. Update the `Yak2D` package (`dotnet add package Yak2D`).
+- **When drawing a transparent render target over something else:** the render target holds premultiplied colour, so composite it with a draw stage created with `BlendState.Premultiplied`, not `Alpha`. See [Transparent render targets](drawing.md#transparent-render-targets-and-premultiplied).
 
 ## My application quits when I switch graphics API
 

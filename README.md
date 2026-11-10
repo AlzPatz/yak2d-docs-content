@@ -21,11 +21,12 @@ Pages pull code from real projects with DocFX includes, e.g. `[!code-csharp[](..
 |---|---|
 | `code/GettingStarted/MyFirstYakApp` | Getting Started tutorial |
 | `code/YakRun/Part1` ... `Part4` | Yak Run tutorial: a complete snapshot per part. `Assets/` holds the source textures |
-| `code/Snippets` | The Manual's guide examples. `dotnet run -- <ExampleName>` runs one; no argument lists them |
+| `code/Snippets` | The Manual's guide examples and the Cookbook recipes (`Recipes.cs`). `dotnet run -- <ExampleName>` runs one; no argument lists them |
 | `code/CustomShader` | Custom shader tutorial |
 | `code/DocsTools/Harness` | Not published. Wraps any example app, scripts keyboard input and saves a PNG of a frame |
 | `code/DocsTools/capture.sh` | Regenerates all screenshots (needs a desktop session) |
 | `code/DocsTools/make_yakrun_assets.py` | Regenerates the Yak Run textures (needs Python + Pillow) |
+| `code/DocsTools/make_recipe_assets.py` | Regenerates the Cookbook's coin sprite sheet (needs Python + Pillow) |
 
 ## Building locally
 

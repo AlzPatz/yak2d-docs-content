@@ -38,6 +38,11 @@ CAPTURES=(
   "Snippets|SurfaceReadback|1|guide/readback.png|--mouse 300,270"
   "Snippets|MeshExample|1.2|guide/mesh.png|"
   "Snippets|AssetLoading|1|guide/assets.png|"
+  "Snippets|SpriteAnimation|1|guide/recipe-sprite-animation.png|"
+  "Snippets|Parallax|2|guide/recipe-parallax.png|"
+  "Snippets|Particles|2.3|guide/recipe-particles.png|"
+  "Snippets|HudOverlay|1.5|guide/recipe-hud.png|"
+  "Snippets|TransparentLayer|1|guide/recipe-transparent-layer.png|"
 )
 
 build_for() {
