@@ -29,13 +29,15 @@ var fromStream = yak.Surfaces.LoadTexture(stream);
 
 ### Textures from data
 
-Textures can also be made from pixel data in code. [CreateRgbaFromData()](xref:Yak2D.ISurfaces.CreateRgbaFromData*) takes one `Vector4` per pixel (red, green, blue, alpha, each 0 to 1), row by row from the top-left. [LoadTextureColourData()](xref:Yak2D.ISurfaces.LoadTextureColourData*) loads an image's pixels into a [TextureData](xref:Yak2D.TextureData) without creating a texture, so you can inspect or change them first:
+Textures can also be made from pixel data in code. [CreateRgbaFromData()](xref:Yak2D.ISurfaces.CreateRgbaFromData*) takes one `Vector4` per pixel (red, green, blue, alpha, each 0 to 1), row by row from the top-left. [LoadTextureColourData()](xref:Yak2D.ISurfaces.LoadTextureColourData*) loads an image's pixels into a [TextureData](xref:Yak2D.TextureData) without creating a texture, so you can inspect or change them first.
+
+Index 0 is the top-left pixel and row 0 the top of the image on every graphics API (from yak2D 1.3.0), so the same array draws the same way up everywhere: don't flip rows for OpenGL. `LoadTextureColourData()` also returns `TextureData.Pixels` with row 0 at the top, so its output can go straight into `CreateRgbaFromData()`:
 
 ![Textures created from data](../images/guide/texture-from-data.png)
 
 [!code-csharp[](../code/Snippets/Surfaces.cs#texture-from-data)]
 
-[CreateFloat32FromData()](xref:Yak2D.ISurfaces.CreateFloat32FromData*) makes a single-channel texture of `float` values, which is what the [distortion](distortion.md) stage uses for height maps.
+[CreateFloat32FromData()](xref:Yak2D.ISurfaces.CreateFloat32FromData*) makes a single-channel texture of `float` values, which is what the [distortion](distortion.md) stage uses for height maps. Its rows are ordered the same way: row 0 is the top on every graphics API, with no flip for OpenGL.
 
 ### Texture size
 

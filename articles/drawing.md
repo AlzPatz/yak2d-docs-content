@@ -70,6 +70,9 @@ On the left all three squares are on layer 0, so depth decides the order. On the
 
 Sorting is by layer, then depth, then texture. Requests that share a texture and end up next to each other after sorting are drawn in a single batch, so giving sprites that share a texture the same layer and depth (when their relative order doesn't matter) makes drawing faster.
 
+> [!NOTE]
+> Before **yak2D 1.3.0**, anything drawn on layer 10 or higher did not appear. From 1.3.0 every layer draws. See [What's new](whatsnew.md).
+
 ### Depth between draw stages
 
 Draw stages write to the render target's **depth buffer**, and later stages are depth-tested against it. If you render two draw stages onto the same surface, something in the second stage can be hidden by something from the first that is on a higher layer or has a lower depth. When the second stage should simply be drawn on top of the first (a HUD over the game, for example), clear the depth in between:

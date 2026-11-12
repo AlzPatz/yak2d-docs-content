@@ -81,6 +81,22 @@ The matching C# struct:
 
 [!code-csharp[](../code/CustomShader/WavyYak.cs#uniforms)]
 
+### Texture coordinates you compute yourself
+
+`FTex` is already correct on every graphics API, so a shader that samples with `FTex` (or an offset from it, as above) needs no flip.
+
+A shader that works out its own texture coordinates, for example tiling a texture in world space or picking a cell of an atlas, has to allow for how the texture's rows are stored: bottom-up on OpenGL, top-down on Vulkan, Direct3D11 and Metal. From yak2D 1.3.0, stages created with `useSpirvCompile: true` get a define for this, inserted directly after the `#version` line: `#define YAK2D_TEXTURE_ROWS_BOTTOM_UP 1` on OpenGL, `0` on Vulkan, Direct3D11 and Metal. Flip the coordinate when it is set:
+
+```glsl
+#if YAK2D_TEXTURE_ROWS_BOTTOM_UP
+    uv.y = 1.0 - uv.y;
+#endif
+```
+
+Shaders that don't use the define compile and behave as before.
+
+Precompiled per-API shaders (`useSpirvCompile: false`) don't get the define. A `Shaders/OpenGL` shader only ever runs on OpenGL, so flip the coordinate there directly.
+
 ## Setting data each frame
 
 [SetCustomShaderUniformValues()](xref:Yak2D.IStages.SetCustomShaderUniformValues*) sends a struct (or an array of structs) to the named uniform. Call it whenever the values change, typically in `PreDrawing()`:
